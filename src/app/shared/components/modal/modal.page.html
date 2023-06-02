@@ -1,0 +1,57 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="medium" (click)="cancel()">
+        <ion-icon size="large" slot="icon-only" name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title class="ion-text-center">Editar {{titulo}}</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-icon
+        (click)="confirm()"
+        slot="icon-only"
+        name="checkmark-circle-outline"
+      ></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div *ngFor="let i of Object.keys(item)">
+    <div *ngIf="i !== 'id' && i !== 'checked'  ">
+      <ion-item [ngSwitch]="i">
+        <ion-label position="floating">{{ i }} </ion-label>
+
+        <ion-input
+          *ngSwitchCase="i === 'preco'|| i === 'quantidade' ? i : ''"
+          (keyup.enter)="confirm()"
+          type="number"
+          [(ngModel)]="item[i]"
+        ></ion-input>
+
+        <!-- ======================================================================================= -->
+        <ion-input *ngSwitchCase="'data'" value=" " disabled
+          >{{ item[i] | date: 'dd/MM/yy HH:mm' }}</ion-input
+        >
+        <!-- ======================================================================================= -->
+
+        <ion-select
+          *ngSwitchCase="'medida'"
+          multiple="false"
+          [(ngModel)]="item[i]"
+        >
+          <ion-select-option value="kg">Kg</ion-select-option>
+          <ion-select-option value="un">Un</ion-select-option>
+        </ion-select>
+
+        <ion-input
+          *ngSwitchDefault
+          (keyup.enter)="confirm()"
+          [(ngModel)]="item[i]"
+        ></ion-input>
+      </ion-item>
+    </div>
+  </div>
+</ion-content>

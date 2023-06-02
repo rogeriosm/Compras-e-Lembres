@@ -1,0 +1,75 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title class="ion-text-center"> Lembretes </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="cadastraLembrete" (ngSubmit)="addItems()">
+    <ion-item id="open-modal" class="fonteSmall">
+      <ion-icon slot="start" name="calendar-outline" color="primary"></ion-icon>
+      <ion-label>Escolha uma data</ion-label>
+      <ion-text slot="end"> {{ dataHoje | date: 'dd/MM/yy HH:mm' }} </ion-text>
+    </ion-item>
+    <ion-modal trigger="open-modal">
+      <ng-template>
+        <ion-content>
+          <ion-datetime
+            formControlName="data"
+            id="data"
+            locale="pt-BR"
+            [value]="dataHoje"
+            [min]="Hoje"
+            display-format="DD.MM.YYYY HH:mm"
+            size="cover"
+            #calendario
+            (ionChange)="dataAlterada(calendario.value)"
+            showDefaultButtons="true"
+            (ionCancel)="showPicker = false"
+          ></ion-datetime>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+
+    <ion-item class="fonteSmall">
+      <ion-label position="floating">Lembrete</ion-label>
+      <ion-input
+        type="text"
+        id="lembreteNota"
+        formControlName="lembrete"
+      ></ion-input>
+    </ion-item>
+
+    <ion-button
+      [disabled]="cadastraLembrete.invalid"
+      (click)="addItems()"
+      color="primary"
+      expand="full"
+    >
+      Adicionar Lembrete!
+    </ion-button>
+  </form>
+
+  <ion-list>
+    <ion-item-sliding *ngFor="let item of lembrete" #todoList>
+      <app-sliding
+        (saida)="onRecebeDados($event)"
+        [item]="item"
+        item_key="lembrete"
+        [sliding]="todoList"
+      ></app-sliding>
+
+      <ion-item>
+        <ion-label text-wrap>
+          <p class="fonteMedium">
+            <s *ngIf="item.checked;else teste">{{ item.lembrete }}</s>
+            <ng-template #teste>{{ item.lembrete }}</ng-template>
+          </p>
+          <ion-text color="secondary">
+            <p class="fonteSmall">{{ item.data | date: "dd/MM/yy HH:mm" }}</p>
+          </ion-text>
+        </ion-label>
+      </ion-item>
+    </ion-item-sliding>
+  </ion-list>
+</ion-content>

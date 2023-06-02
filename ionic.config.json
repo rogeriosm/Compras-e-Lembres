@@ -1,0 +1,7 @@
+{
+  "name": "divida",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

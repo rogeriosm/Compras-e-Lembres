@@ -1,0 +1,142 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title class="ion-text-center"> Lista de Compras </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="cadastraCompras" (ngSubmit)="addCompra()">
+    <ion-item>
+      <ion-label position="floating">Mercado</ion-label>
+      <ion-input
+        type="text"
+        formControlName="mercado"
+        id="mercado"
+        name="mercado"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Produto</ion-label>
+      <ion-input type="text" formControlName="produto" id="produto"></ion-input>
+    </ion-item>
+
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">Quantidade</ion-label>
+            <ion-input
+              type="number"
+              onKeyPress="if(this.value.length==3) return false;"
+              formControlName="quantidade"
+              id="quantidade"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+
+        <ion-col style="display: grid">
+          <ion-item style="align-self: end">
+            <ion-label>Medida</ion-label>
+            <ion-select
+              formControlName="medida"
+              value="medida"
+              multiple="false"
+            >
+              <ion-select-option value="kg">Kg</ion-select-option>
+              <ion-select-option value="un">Un</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <!-- <ion-text color="danger" *ngIf="(cadastraCompras.get('mercado')?.dirty && cadastraCompras.get('mercado')?.dirty)">
+      <p class="required">Een titel is verplicht.</p>
+    </ion-text>
+    <small style="background-color: blueviolet; color: white;" class="ion-text-center">Arraste para o lado para mais opções</small> -->
+
+    <ion-button
+      [disabled]="cadastraCompras.invalid"
+      (click)="addCompra()"
+      color="primary"
+      expand="full"
+    >
+      Adicionar Compras!
+    </ion-button>
+  </form>
+  <div class="ion-text-center precoTotal" style="color: black">
+    <h3>Preço Total: {{ formataPreco(precoTotal) }}</h3>
+  </div>
+  <ion-list>
+    <ion-item-sliding *ngFor="let item of listaCompra" #groceryList>
+      <app-sliding
+        (saida)="onRecebeDados($event)"
+        [item]="item"
+        item_key="listaCompras"
+        [sliding]="groceryList"
+      ></app-sliding>
+
+      <ion-item (click)="adicionaPreco(item)">
+        <ion-label text-wrap>
+          <h3>
+            <s *ngIf="item.checked;else checked">
+              {{ item.produto }} - quantidade: {{ item.quantidade }} -
+              {{item.medida }} = {{ formataPreco(item.preco) }}
+            </s>
+            <ng-template #checked>
+              <span class="laranja">{{ upperCase(item.produto) }}</span> -
+              quantidade: <span class="cinza">{{ item.quantidade }}</span> - {{
+              item.medida }} =
+              <span class="cinza">{{ formataPreco(item.preco) }}</span>
+            </ng-template>
+          </h3>
+          <ion-grid>
+            <ion-row>
+              <ion-col class="ion-text-start"
+                ><h3>{{ upperCase(item.mercado) }}</h3>
+              </ion-col>
+              <ion-col class="ion-text-end">
+                <span *ngIf="item.medida.toString() === 'un';else total"
+                  ><h2>
+                    Total:
+                    <span class="azul">
+                      {{ formataPreco(item.preco * item.quantidade) }}
+                    </span>
+                  </h2>
+                </span>
+                <ng-template #total
+                  ><h2>
+                    Total:
+                    <span class="azul">{{ formataPreco(item.preco) }}</span>
+                  </h2></ng-template
+                ></ion-col
+              >
+            </ion-row>
+          </ion-grid>
+        </ion-label>
+      </ion-item>
+
+      <!-- <ion-item-options side="start">
+        <ion-item-option color="primary" (click)="onCheck(item, groceryList)">
+          Feito
+        </ion-item-option>
+      </ion-item-options> -->
+
+      <!-- <ion-item-options side="end">
+        <ion-item-option
+          color="secondary"
+          (click)="updateCompra(item, groceryList)"
+        >
+          Editar
+        </ion-item-option>
+
+        <ion-item-option
+          color="danger"
+          (click)="deleteCompra(item, groceryList)"
+        >
+          Apagar
+        </ion-item-option>
+      </ion-item-options> -->
+    </ion-item-sliding>
+  </ion-list>
+</ion-content>

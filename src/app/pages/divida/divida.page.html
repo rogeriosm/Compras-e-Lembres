@@ -1,0 +1,94 @@
+<ion-header>
+  <ion-toolbar>
+    <!-- <ion-buttons slot="start">
+      <ion-menu-button menu="m1"></ion-menu-button>
+    </ion-buttons> -->
+
+    <ion-title class="ion-text-center">Divida</ion-title>
+    <ion-buttons slot="primary">
+      <ion-button routerLink="cadastro">
+        <ion-icon slot="icon-only" name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div id="container" class="ion-text-center">
+    <h1>cadastrar nova divida</h1>
+    <form [formGroup]="cadastraDivida" (ngSubmit)="salvarDivida()">
+      <ion-list>
+        <ion-item>
+          <ion-label position="floating">CPF dono divida</ion-label>
+          <ion-input
+            type="text"
+            formControlName="cpf_devedor"
+            id="cpfDevedor"
+          ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Nome Loja</ion-label>
+          <ion-input
+            type="text"
+            formControlName="nome_loja"
+            id="nomeLoja"
+          ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">numero de parcelas</ion-label>
+          <ion-input
+            type="number"
+            formControlName="quant_vezes"
+            id="quantPrest"
+          ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">mes primeira parcela</ion-label>
+          <ion-input
+            type="date"
+            formControlName="primeira_parcela_mes"
+            id="inicioParcela"
+          ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">valor da Parcela</ion-label>
+          <ion-input
+            type="number"
+            formControlName="valor_parcela"
+            id="valorParcela"
+          ></ion-input>
+        </ion-item>
+      </ion-list>
+      <button [disabled]="cadastraDivida.invalid"><h1>Enviar</h1></button>
+    </form>
+  </div>
+  <div id="container" class="ion-text-center">
+    <h1>dividas</h1>
+  </div>
+  <ion-grid fixed>
+    <ng-template></ng-template>
+    <ion-row>
+      <ion-col sizeMd="2" sizeSm="2">primeira parcela</ion-col>
+      <ion-col sizeMd="2" sizeSm="2">nome loja</ion-col>
+      <ion-col sizeMd="2" sizeSm="2">cpf devedor</ion-col>
+      <ion-col sizeMd="2" sizeSm="2">quant vezes</ion-col>
+      <ion-col sizeMd="2" sizeSm="2">valor prestacao</ion-col>
+      <ion-col sizeMd="2" sizeSm="2">total</ion-col>
+    </ion-row>
+    <ion-row *ngFor="let item of listaDivida">
+      <ion-col sizeMd="2" sizeSm="2">{{ item.primeira_parcela_mes }}</ion-col>
+      <ion-col sizeMd="2" sizeSm="2">{{ item.nome_loja }}</ion-col>
+      <ion-col sizeMd="2" sizeSm="2">{{ item.cpf_devedor }}</ion-col>
+      <ion-col sizeMd="2" sizeSm="2">{{ item.quant_vezes }}</ion-col>
+      <ion-col sizeMd="2" sizeSm="2">{{ item.valor_parcela }} </ion-col>
+      <ion-col sizeMd="2" sizeSm="2"
+        >{{ (item.valor_parcela * item.quant_vezes)}}
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+</ion-content>
